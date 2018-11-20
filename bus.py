@@ -14,11 +14,11 @@ class Bus:
                           '(KHTML, like Gecko) Mobile/14F89 MicroMessenger/6.5.10 NetType/WIFI Language/zh_CN'
         }
 
-        self.homepage_url = 'http://shanghaicity.openservice.kankanews.com/'
-        self.query_router_url = 'http://shanghaicity.openservice.kankanews.com/public/bus'
-        self.query_sid_url = 'http://shanghaicity.openservice.kankanews.com/public/bus/get'
-        self.query_router_details_url = 'http://shanghaicity.openservice.kankanews.com/public/bus/mes/sid/'
-        self.query_stop_url = 'http://shanghaicity.openservice.kankanews.com/public/bus/Getstop'
+        self.homepage_url = 'https://shanghaicity.openservice.kankanews.com/'
+        self.query_router_url = 'https://shanghaicity.openservice.kankanews.com/public/bus'
+        self.query_sid_url = 'https://shanghaicity.openservice.kankanews.com/public/bus/get'
+        self.query_router_details_url = 'https://shanghaicity.openservice.kankanews.com/public/bus/mes/sid/'
+        self.query_stop_url = 'https://shanghaicity.openservice.kankanews.com/public/bus/Getstop'
 
     def _homepage(self):
         r = self.s.get(self.homepage_url, headers=self.headers)
@@ -40,7 +40,7 @@ class Bus:
 
     def _query_router_details_page(self, sid, direction='0'):
         self.headers['Referer'] = self.query_router_url
-        url = self.query_router_details_url + sid + '/stoptype/' + direction
+        url = self.query_router_details_url + sid + '?stoptype=' + direction
         r = self.s.get(url, headers=self.headers)
 
         return r
@@ -156,7 +156,7 @@ class Bus:
             for c in station.children:
                 if c.name == 'span':
                     if c.attrs['class'][0] == 'num':
-                        router['stop_id'] = c.string
+                        router['stop_id'] = int(c.string.split('.')[0])
                     elif c.attrs['class'][0] == 'name':
                         router['stop_name'] = c.string
             stops.append(router)
